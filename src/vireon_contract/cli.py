@@ -2,9 +2,11 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import numpy as np
+
 from .schema import Spec, Capsule, Metric, Falsifier
 from .capsule import write_capsule, default_provenance
 from .verify import claim_sha256
+
 
 def _demo_gray_scott_like(seed: int, steps: int) -> float:
     # Deterministic numeric workload for proving capsule plumbing + determinism falsifier.
@@ -13,6 +15,7 @@ def _demo_gray_scott_like(seed: int, steps: int) -> float:
     for _ in range(steps):
         x = np.tanh(x + 0.01 * np.roll(x, 1))
     return float(np.mean(x * x))
+
 
 def main() -> None:
     ap = argparse.ArgumentParser(prog="vireon")
@@ -46,7 +49,14 @@ def main() -> None:
         capsule = Capsule(
             spec=spec,
             provenance=default_provenance(),
-            metrics=[Metric(name="demo_energy", value=score, units="arb", notes="mean(tanh dynamics)^2")],
+            metrics=[
+                Metric(
+                    name="demo_energy",
+                    value=score,
+                    units="arb",
+                    notes="mean(tanh dynamics)^2",
+                )
+            ],
             falsifiers=[
                 Falsifier(
                     name="determinism_same_seed",

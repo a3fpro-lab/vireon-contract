@@ -75,5 +75,5 @@ def main() -> None:
             artifacts={},
         )
 
-        write_capsule(Path(args.out), capsule)
+        write_capsule(Path(args.out), capsule, claim_file=repo_root / "claim.json")
         print(f"Wrote capsule to {args.out}")

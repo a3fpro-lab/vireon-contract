@@ -47,3 +47,33 @@ def verify_claim_locked(capsule_dir: Path) -> None:
     actual = sha256_bytes(stable_json_bytes(claim_obj))
     if actual != expected:
         raise AssertionError(f"claim hash mismatch: expected {expected}, got {actual}")
+
+
+def verify_claim_requirements(capsule_dir: Path) -> None:
+    """
+    Enforce claim.json content:
+    - required_falsifiers listed in claim.json must exist in capsule.json
+    - each required falsifier must have passed==True
+    """
+    capsule = json.loads((capsule_dir / "capsule.json").read_text(encoding="utf-8"))
+    falsifiers = capsule.get("falsifiers", [])
+    fals_map = {f.get("name"): f for f in falsifiers}
+
+    claim_obj = json.loads((capsule_dir / "claim.json").read_text(encoding="utf-8"))
+    claims = claim_obj.get("claims", [])
+    if not claims:
+        raise AssertionError("claim.json has no claims[]")
+
+    for c in claims:
+        cid = c.get("id", "UNKNOWN")
+        req = c.get("required_falsifiers", [])
+        if not req:
+            raise AssertionError(f"claim {cid} missing required_falsifiers")
+
+        missing = [name for name in req if name not in fals_map]
+        if missing:
+            raise AssertionError(f"claim {cid} missing falsifiers in capsule: {missing}")
+
+        failed = [name for name in req if fals_map[name].get("passed") is not True]
+        if failed:
+            raise AssertionError(f"claim {cid} required falsifiers not passed: {failed}")

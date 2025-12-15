@@ -1,0 +1,11 @@
+{
+  "version": "0.2",
+  "claims": [
+    {
+      "id": "KERNEL_DEMO_DETERMINISM",
+      "statement": "Same spec + seed reproduces exactly (tau=0) for the demo workload.",
+      "required_falsifiers": ["determinism_same_seed", "hash_verification"],
+      "tolerances": { "distance": "abs", "tau": 0.0 }
+    }
+  ]
+}

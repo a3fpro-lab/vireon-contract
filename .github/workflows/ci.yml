@@ -27,6 +27,10 @@ jobs:
         run: |
           vireon capsule --out results/capsule_ci --seed 7 --steps 80
 
+      - name: Verify capsule (hash + claim lock)
+        run: |
+          python -c "from pathlib import Path; from vireon_contract.verify import verify_hashes, verify_claim_locked; d=Path('results/capsule_ci'); verify_hashes(d); verify_claim_locked(d); print('verified')"
+
       - name: Upload capsule artifact
         uses: actions/upload-artifact@v4
         with:

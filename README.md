@@ -13,3 +13,7 @@ The full axiom/law/maths are in **docs/VIREON_CONTRACT.md**.
 python -m pip install -U pip
 python -m pip install -e . pytest
 pytest -q
+
+vireon capsule --out results/capsule_0001 --seed 7 --steps 80
+cat results/capsule_0001/capsule.sha256
+cat results/capsule_0001/manifest.json

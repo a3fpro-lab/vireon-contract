@@ -1,11 +1,17 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "claims": [
     {
-      "id": "KERNEL_DEMO_DETERMINISM",
-      "statement": "Same spec + seed reproduces exactly (tau=0) for the demo workload.",
-      "required_falsifiers": ["determinism_same_seed", "hash_verification"],
-      "tolerances": { "distance": "abs", "tau": 0.0 }
+      "id": "KERNEL_LEVELS_OF_CORRESPONDENCE",
+      "statement": "Capsule must demonstrate Transformation (artifact), Definition (inverse seed recovery), and Correspondence (recovered seed == spec seed).",
+      "required_falsifiers": [
+        "determinism_same_seed",
+        "inverse_seed_recovery",
+        "correspondence_seed_matches_spec",
+        "hash_verification",
+        "claim_lock"
+      ],
+      "tolerances": { "distance": "exact", "tau": 0.0 }
     }
   ]
 }

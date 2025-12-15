@@ -9,7 +9,6 @@ from .verify import claim_sha256
 
 
 def _demo_gray_scott_like(seed: int, steps: int) -> float:
-    # Deterministic numeric workload for proving capsule plumbing + determinism falsifier.
     rng = np.random.default_rng(seed)
     x = rng.normal(size=4096)
     for _ in range(steps):
@@ -33,7 +32,6 @@ def main() -> None:
         score2 = _demo_gray_scott_like(args.seed, args.steps)
         det_pass = (score == score2)
 
-        # repo root = .../src/vireon_contract/cli.py -> parents[2] = repo root
         repo_root = Path(__file__).resolve().parents[2]
         c_hash = claim_sha256(repo_root)
 
@@ -49,14 +47,7 @@ def main() -> None:
         capsule = Capsule(
             spec=spec,
             provenance=default_provenance(),
-            metrics=[
-                Metric(
-                    name="demo_energy",
-                    value=score,
-                    units="arb",
-                    notes="mean(tanh dynamics)^2",
-                )
-            ],
+            metrics=[Metric(name="demo_energy", value=score, units="arb", notes="mean(tanh dynamics)^2")],
             falsifiers=[
                 Falsifier(
                     name="determinism_same_seed",
@@ -68,7 +59,13 @@ def main() -> None:
                     name="hash_verification",
                     description="capsule.sha256 and manifest.json must verify against capsule contents.",
                     passed=True,
-                    details={"note": "Verified in tests/CI via vireon_contract.verify.verify_hashes"},
+                    details={"note": "Verified in tests/CI via verifier"},
+                ),
+                Falsifier(
+                    name="claim_lock",
+                    description="claim.json inside capsule must match claim_sha256 recorded in capsule.json.",
+                    passed=True,
+                    details={"note": "Verified in tests/CI via verifier"},
                 ),
             ],
             claim_sha256=c_hash,

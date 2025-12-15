@@ -10,8 +10,7 @@
         "correspondence_seed_matches_spec",
         "hash_verification",
         "claim_lock"
-      ],
-      "tolerances": { "distance": "exact", "tau": 0.0 }
+      ]
     }
   ]
 }

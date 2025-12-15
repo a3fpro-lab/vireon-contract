@@ -3,8 +3,11 @@ from dataclasses import dataclass, asdict
 from typing import Any, Dict, List
 import json
 
+
 def _stable_json(obj: Any) -> str:
+    # Stable JSON for hashing + reproducibility
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
 
 @dataclass(frozen=True)
 class Provenance:
@@ -12,6 +15,7 @@ class Provenance:
     platform: str
     python: str
     deps: Dict[str, str]
+
 
 @dataclass(frozen=True)
 class Spec:
@@ -22,6 +26,7 @@ class Spec:
     init: Dict[str, Any]
     boundary: Dict[str, Any]
 
+
 @dataclass(frozen=True)
 class Metric:
     name: str
@@ -29,12 +34,14 @@ class Metric:
     units: str = ""
     notes: str = ""
 
+
 @dataclass(frozen=True)
 class Falsifier:
     name: str
     description: str
     passed: bool
     details: Dict[str, Any]
+
 
 @dataclass(frozen=True)
 class Capsule:

@@ -1,8 +1,36 @@
-# tests/test_capsule_determinism.py
 import hashlib
+import sys
+from pathlib import Path
+
 import numpy as np
 
-from vireon_rd_groundtruth.demo import _demo_gray_scott_like
+# Ensure `src/` layout works in CI even if the package isn't installed yet.
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
+if SRC.exists():
+    sys.path.insert(0, str(SRC))
+
+# Try the likely module paths in *this* repo.
+_demo_gray_scott_like = None
+for modpath in (
+    "vireon_contract.demo",
+    "vireon_contract.demos",
+    "vireon_contract.capsule_demo",
+    "vireon_contract.gray_scott",
+    "demo",
+):
+    try:
+        mod = __import__(modpath, fromlist=["_demo_gray_scott_like"])
+        _demo_gray_scott_like = getattr(mod, "_demo_gray_scott_like")
+        break
+    except Exception:
+        pass
+
+if _demo_gray_scott_like is None:
+    raise ImportError(
+        "Could not find _demo_gray_scott_like in this repo. "
+        "Search for its location and add it to the modpath list."
+    )
 
 
 def _sha256_state(x) -> str:

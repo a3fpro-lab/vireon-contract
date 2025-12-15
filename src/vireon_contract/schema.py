@@ -42,6 +42,7 @@ class Capsule:
     provenance: Provenance
     metrics: List[Metric]
     falsifiers: List[Falsifier]
+    claim_sha256: str
     artifacts: Dict[str, str]
 
     def to_json(self) -> str:

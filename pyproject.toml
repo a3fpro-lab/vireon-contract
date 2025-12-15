@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vireon-contract"
+version = "0.1.0"
+description = "VIREON Contract: reproducible, falsifiable experiment capsules"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "The Architects (VIREON)"}]
+dependencies = ["numpy>=1.24"]
+
+[project.scripts]
+vireon = "vireon_contract.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

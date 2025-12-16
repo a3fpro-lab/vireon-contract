@@ -7,6 +7,8 @@ from .schema import Spec, Capsule, Metric, Falsifier
 from .capsule import write_capsule, default_provenance
 from .verify import claim_sha256
 
+# add near the top with other imports
+from .verify import verify_capsule_dir
 
 def _demo_gray_scott_like(seed: int, steps: int) -> np.ndarray:
     """
